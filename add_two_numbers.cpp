@@ -1,15 +1,14 @@
-/*You are given two non-empty linked lists representing two non-negative integers. 
- * The digits are stored in reverse order, and each of their nodes contains a single digit.
- * Add the two numbers and return the sum as a linked list.
- * You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+/*You are given two non-empty linked lists representing two non-negative
+ * integers. The digits are stored in reverse order, and each of their nodes
+ * contains a single digit. Add the two numbers and return the sum as a linked
+ * list. You may assume the two numbers do not contain any leading zero, except
+ * the number 0 itself.
  *
  * Example:
  * Input: l1 = [2,4,3], l2 = [5,6,4]
  * Output: [7,0,8]
  * Explanation: 342 + 465 = 807.
  */
-
-
 
 #include <cmath>
 #include <iostream>
@@ -24,59 +23,30 @@ struct ListNode {
   ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-std::string add_big_ass_number(std::string int1, std::string int2) {
-  std::string result = "";
-  int carry = 0, sum = 0, i = int1.size() - 1, j = int2.size() - 1;
-  while (i >= 0 || j >= 0 || carry) {
-    sum = carry;
-    if (i >= 0)
-      sum += int1[i--] - '0';
-    if (j >= 0)
-      sum += int2[j--] - '0';
-    carry = sum / 10;
-    result.insert(result.begin(), (sum % 10) + '0');
-  }
-
-  return result;
-}
-
 class Solution {
 public:
   ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
-    std::string integer1 = "";
-    std::string integer2 = "";
     ListNode *curr1 = l1;
     ListNode *curr2 = l2;
-    while (curr1 != nullptr) {
-			integer1.insert(integer1.begin(),curr1->val+'0');
-      //integer1 += std::to_string(curr1->val);
-      curr1 = curr1->next;
-    }
-    while (curr2 != nullptr) {
-			integer2.insert(integer2.begin(),curr2->val+'0');
-			//integer2 += std::to_string(curr2->val);
-      curr2 = curr2->next;
-    }
-    std::string result = add_big_ass_number(integer1, integer2);
-
-    // making node of results
-    ListNode *head = new ListNode(0);
+    ListNode *head = new ListNode(0); // Dummy head
     ListNode *tail = head;
+    int carry = 0;
+    while (curr1 != nullptr || curr2 != nullptr || carry) {
+      int sum = carry;
+      if (curr1 != nullptr) {
+        sum += curr1->val ;
+        curr1 = curr1->next;
+      }
+      if (curr2 != nullptr) {
+        sum += curr2->val ;
+        curr2 = curr2->next;
+      }
+      carry = sum / 10;
 
-    for (int i = result.size() - 1; i >= 0; i--) {
-			tail->next= new ListNode(result[i]-'0');
-			tail=tail->next;
+      tail->next = new ListNode(sum % 10);
+      tail = tail->next;
     }
 
     return head->next;
   }
 };
-
-int main()
-{
-	std::string int1="9";
-	std::string int2="";
-	std::string results=add_big_ass_number(int1,int2);
-	std::cout<<results<<std::endl;
-	return 0;
-}
